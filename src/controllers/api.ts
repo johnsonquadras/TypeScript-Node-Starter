@@ -6,6 +6,11 @@ import graph from "fbgraph";
 import { Response, Request, NextFunction } from "express";
 
 
+
+export let getSample = (req: Request, res: Response) => {
+  res.json({ user: req.hostname });
+};
+
 /**
  * GET /api
  * List of API examples.
