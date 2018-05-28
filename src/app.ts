@@ -20,10 +20,12 @@ const MongoStore = mongo(session);
 dotenv.config({ path: ".env.example" });
 
 // Controllers (route handlers)
-import * as homeController from "./controllers/home";
-import * as userController from "./controllers/user";
-import * as apiController from "./controllers/api";
-import * as contactController from "./controllers/contact";
+import * as routes from "./routes";
+
+// import * as homeController from "./controllers/home";
+// import * as userController from "./modules/user/user.controller";
+// import * as apiController from "./controllers/api";
+// import * as contactController from "./controllers/contact";
 
 
 // API keys and Passport configuration
@@ -35,7 +37,7 @@ const app = express();
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
 (<any>mongoose).Promise = bluebird;
-mongoose.connect(mongoUrl, {useMongoClient: true}).then(
+mongoose.connect(mongoUrl, { useMongoClient: true }).then(
   () => { /** ready to use. The `mongoose.connect()` promise resolves to undefined. */ },
 ).catch(err => {
   console.log("MongoDB connection error. Please make sure MongoDB is running. " + err);
@@ -43,9 +45,7 @@ mongoose.connect(mongoUrl, {useMongoClient: true}).then(
 });
 
 // Express configuration
-app.set("port", process.env.PORT || 3000);
-app.set("views", path.join(__dirname, "../views"));
-app.set("view engine", "pug");
+app.set("port", process.env.PORT || 3001);
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -73,8 +73,13 @@ app.use((req, res, next) => {
 /**
  * Primary app routes.
  */
-app.get("/sample", apiController.getSample);
-app.get("/", homeController.index);
+routes.registerRoutes(app);
+
+
+
+//Remove this
+// app.get("/sample", apiController.getSample);
+// app.get("/", homeController.index);
 // app.get("/login", userController.getLogin);
 // app.post("/login", userController.postLogin);
 // app.get("/logout", userController.logout);
